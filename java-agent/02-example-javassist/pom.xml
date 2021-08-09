@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>java-agent</artifactId>
+        <groupId>org.example</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>02-example-javassist</artifactId>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.21.0-GA</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>javassist-agent</finalName>
+        <plugins>
+
+<!--            &lt;!&ndash; 将javassist包打包到Agent中 &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-shade-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>shade</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <artifactSet>-->
+<!--                        <includes>-->
+<!--                            <include>org.javassist:javassist:jar:</include>-->
+<!--                        </includes>-->
+<!--                    </artifactSet>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <!--Premain-Class ：包含 premain 方法的类（类的全路径名）我们这里就是UserAgent类 -->
+                            <Premain-Class>code.UserAgent</Premain-Class>
+                            <!-- true表示能重定义此代理所需的类，默认值为 false（可选） -->
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <!-- true表示能重转换此代理所需的类，默认值为 false （可选）-->
+                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                        </manifestEntries>
+                    </archive>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
+<!--                <version>3.1.0</version>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        &lt;!&ndash;自动添加META-INF/MANIFEST.MF &ndash;&gt;-->
+<!--                        <manifest>-->
+<!--                            <addClasspath>true</addClasspath>-->
+<!--                        </manifest>-->
+<!--                        <manifestEntries>-->
+<!--                            &lt;!&ndash;Premain-Class ：包含 premain 方法的类（类的全路径名）我们这里就是UserAgent类 &ndash;&gt;-->
+<!--                            <Premain-Class>code.UserAgent</Premain-Class>-->
+<!--                            &lt;!&ndash; true表示能重定义此代理所需的类，默认值为 false（可选） &ndash;&gt;-->
+<!--                            <Can-Redefine-Classes>true</Can-Redefine-Classes>-->
+<!--                            &lt;!&ndash; true表示能重转换此代理所需的类，默认值为 false （可选）&ndash;&gt;-->
+<!--                            <Can-Retransform-Classes>true</Can-Retransform-Classes>-->
+<!--                        </manifestEntries>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+        </plugins>
+    </build>
+</project>
